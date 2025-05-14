@@ -12,4 +12,5 @@ y_true_bin = (y_true > thresh).astype(int)
 y_pred_bin = (y_pred > thresh).astype(int)
 acc = accuracy_score(y_true_bin, y_pred_bin)
 prec = precision_score(y_true_bin, y_pred_bin)
-print(f'MSE: {mse:.4f}, Accuracy: {acc:.4f}, Precision: {prec:.4f}')
+eval_results = {'mse': mse, 'accuracy': acc, 'precision': prec}
+print(eval_results)
