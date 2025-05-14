@@ -8,9 +8,9 @@ class BlockchainMetricsWrapper:
     VALID_ML_STEPS = ["train", "monitor", "promote"]
     
     METRIC_SCHEMAS = {
-        "train": {"accuracy", "loss"},
-        "monitor": {"latency", "throughput", "error_rate"},
-        "promote": {"model_version", "approval_status"}
+        "train": {"accuracy", "precision", "MSE"},
+        "monitor": {"accuracy_drift", "precision_drift", "MSE_drift"},
+        "promote": {"model_version", "URI"}
     }
 
     def __init__(self, ml_step: str, output_dir="."):
