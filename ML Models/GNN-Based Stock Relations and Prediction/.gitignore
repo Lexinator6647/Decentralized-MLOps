@@ -1,0 +1,7 @@
+data/
+.venv/
+__pycache__/
+saved_models/
+.idea/
+results/
+.env/

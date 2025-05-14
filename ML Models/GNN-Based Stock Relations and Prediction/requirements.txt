@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+torch
+torch-geometric
+networkx
+matplotlib
+scikit-learn
+yfinance
+joblib
