@@ -2,7 +2,7 @@ import numpy as np
 import time
 import joblib
 
-# Load model
+# Load Model_3
 clf = joblib.load('model_3.pkl')
 
 # Sample inputs for monitoring

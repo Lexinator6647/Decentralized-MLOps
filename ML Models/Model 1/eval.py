@@ -1,16 +1,27 @@
 import numpy as np
 import joblib
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
 
-# Load model
-model = joblib.load('performance_predictor.pkl')
+# Load Model_1
+model = joblib.load('model_1.pkl')
 
 # Synthetic test data
 X_test = np.random.rand(20, 5)
 y_true = X_test.sum(axis=1) + np.random.randn(20) * 0.1
 
-# Evaluate
+# Predictions
 y_pred = model.predict(X_test)
+
+# Regression metric
 mse = mean_squared_error(y_true, y_pred)
-r2 = r2_score(y_true, y_pred)
-print(f'MSE: {mse:.4f}, R2: {r2:.4f}')
+
+# Binarize for classification metrics (threshold at mean)
+thresh = y_true.mean()
+y_true_bin = (y_true > thresh).astype(int)
+y_pred_bin = (y_pred > thresh).astype(int)
+
+# Classification metrics
+top_acc = accuracy_score(y_true_bin, y_pred_bin)
+top_prec = precision_score(y_true_bin, y_pred_bin)
+
+print(f'MSE: {mse:.4f}, Accuracy: {top_acc:.4f}, Precision: {top_prec:.4f}')

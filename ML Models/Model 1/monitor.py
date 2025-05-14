@@ -2,8 +2,8 @@ import numpy as np
 import time
 import joblib
 
-# Load model
-model = joblib.load('performance_predictor.pkl')
+# Load Model_1
+model = joblib.load('model_1.pkl')
 
 # Sample inference inputs
 sample_inputs = np.random.rand(5, 5)

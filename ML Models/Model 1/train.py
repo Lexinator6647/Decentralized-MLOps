@@ -9,5 +9,5 @@ y = X.sum(axis=1) + np.random.randn(100) * 0.1
 # Train and save model
 model = RandomForestRegressor(n_estimators=10, random_state=42)
 model.fit(X, y)
-joblib.dump(model, 'performance_predictor.pkl')
-print('Performance Predictor trained and saved.')
+joblib.dump(model, 'model_1.pkl')
+print('Model_1 trained and saved.')
