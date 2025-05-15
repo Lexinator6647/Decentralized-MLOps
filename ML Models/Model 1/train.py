@@ -1,10 +1,20 @@
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-import joblib
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
+from datetime import datetime
 
-X = np.random.rand(100, 5)
-y = X.sum(axis=1) + np.random.randn(100) * 0.1
-model = RandomForestRegressor(n_estimators=10, random_state=42)
-model.fit(X, y)
-joblib.dump(model, 'model_1.pkl')
-print('Model_1 trained and saved.')
+def run_model_1():
+    X = np.random.rand(100, 5)
+    y = X.sum(axis=1) + np.random.randn(100) * 0.1
+    model = RandomForestRegressor(n_estimators=10, random_state=42)
+    model.fit(X, y)
+    X_test = np.random.rand(20, 5)
+    y_true = X_test.sum(axis=1) + np.random.randn(20) * 0.1
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_true, y_pred)
+    thresh = y_true.mean()
+    y_true_bin = (y_true > thresh).astype(int)
+    y_pred_bin = (y_pred > thresh).astype(int)
+    acc = accuracy_score(y_true_bin, y_pred_bin)
+    prec = precision_score(y_true_bin, y_pred_bin)
+    return {'mse': mse, 'accuracy': acc, 'precision': prec, 'timestamp': datetime.now().isoformat()}

@@ -1,9 +1,18 @@
 import numpy as np
 from sklearn.ensemble import IsolationForest
-import joblib
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
+from datetime import datetime
 
-X = np.random.randn(200, 3)
-detector = IsolationForest(contamination=0.1, random_state=42)
-detector.fit(X)
-joblib.dump(detector, 'model_2.pkl')
-print('Model_2 trained and saved.')
+def run_model_2():
+    X = np.random.randn(200, 3)
+    model = IsolationForest(contamination=0.1, random_state=42)
+    model.fit(X)
+    X_test = np.vstack([np.random.randn(50, 3), np.random.randn(5, 3) + 5])
+    y_true = np.array([1] * 50 + [-1] * 5)
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_true, y_pred)
+    y_true_bin = (y_true == -1).astype(int)
+    y_pred_bin = (y_pred == -1).astype(int)
+    acc = accuracy_score(y_true_bin, y_pred_bin)
+    prec = precision_score(y_true_bin, y_pred_bin)
+    return {'mse': mse, 'accuracy': acc, 'precision': prec, 'timestamp': datetime.now().isoformat()}
