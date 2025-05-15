@@ -92,36 +92,7 @@ const getPropertyListIds = async (appId, accessToken) => {
   }
 };
 
-// Function to get propertyList rows
-const getPropertyListRows = async (appId, propertylistId, accessToken) => {
-  try {
-    const response = await fetch(
-      `https://sandbox.api.o2-oracle.io/apps/${appId}/propertylists/${propertylistId}/rows`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch property list rows. Status: ${response.status}`
-      );
-    }
-
-    const propertylistRows = await response.json();
-
-    return propertylistRows;
-  } catch (error) {
-    console.error("Error in getPropertyListRows:", error.message);
-    throw error; // Rethrow so the caller can handle the error
-  }
-};
-
-// Function to update propertyList rows
+// Function to post propertyList rows
 const postPropertyListRows = async (
   appId,
   propertylistId,
@@ -225,25 +196,13 @@ const main = async () => {
     // Get property list IDs using the appId
     const propertylistIds = await getPropertyListIds(appId, token);
 
-    const monitoring_metrics_prop_Id = propertylistIds.data[0].id;
     const training_metrics_prop_Id = propertylistIds.data[1].id;
-
-    // Get property list IDs using the appId
-    const training_metrics_listRows = await getPropertyListRows(
-      appId,
-      training_metrics_prop_Id,
-      token
-    );
 
     //Get training_metrics
     const train_metrics_filepath = "train_metrics.json";
     const train_metrics = await readJSON(train_metrics_filepath);
 
-    //Get training_metrics
-    const monitor_metrics_filepath = "monitor_metrics.json";
-    const monitor_metrics = await readJSON(monitor_metrics_filepath);
-
-    //Post PropertyList values
+    //Post training PropertyList values
     const postPropertyList = await postPropertyListRows(
       appId,
       training_metrics_prop_Id,
@@ -251,25 +210,10 @@ const main = async () => {
       train_metrics
     );
 
-    //Post PropertyList values
-    const postMonitorList = await postPropertyListRows(
-      appId,
-      monitoring_metrics_prop_Id,
-      token,
-      monitor_metrics
-    );
-
-    //Publish training property list changes
+    //Publish training PropertyList changes
     const publishTraningMetrics = await publishChanges(
       appId,
       training_metrics_prop_Id,
-      token
-    );
-
-    //Publish monitering property list changes
-    const publishMoniterMetrics = await publishChanges(
-      appId,
-      monitoring_metrics_prop_Id,
       token
     );
   } catch (error) {
