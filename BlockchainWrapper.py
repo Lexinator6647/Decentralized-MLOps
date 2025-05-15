@@ -1,55 +1,61 @@
-import json
 import os
+import json
 import subprocess
 from datetime import datetime
-from generate_json import JSONSaver
 
 class BlockchainMetricsWrapper:
-    VALID_ML_STEPS = ["train", "monitor", "promote"]
-    
+    VALID_ML_STEPS = {"train", "monitor", "promote"}
     METRIC_SCHEMAS = {
-        "train": {"accuracy", "precision", "mse", "timestamp"},
+        "train": {"accuracy", "precision", "MSE", "timestamp"},
         "monitor": {"accuracy_drift", "precision_drift", "mse_drift", "timestamp"},
         "promote": {"model_version", "model_uri", "timestamp"}
     }
 
-    def __init__(self, ml_step: str, output_dir="."):
+    def __init__(self, ml_step: str, output_dir: str = "."):
         if ml_step not in self.VALID_ML_STEPS:
-            raise ValueError(f"Invalid step '{ml_step}'. Must be one of: {self.VALID_ML_STEPS}")
-
+            raise ValueError(f"Invalid step '{ml_step}'")
         self.ml_step = ml_step
-        self.expected_metrics = self.METRIC_SCHEMAS[ml_step]
         os.makedirs(output_dir, exist_ok=True)
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-        self.prefix = f"{ml_step}_metrics"
-        self.filename = os.path.join(output_dir, f"{self.prefix}.json")
+        self.filename = os.path.join(output_dir, f"{ml_step}_metrics.json")
+        base = os.path.dirname(__file__)
+        self.js_update_path = os.path.join(base, "ML_Verse", f"O2_{ml_step}.js")
 
     def validate_metrics(self, metrics: dict):
-        unexpected_keys = set(metrics.keys()) - self.expected_metrics
-        if unexpected_keys:
-            raise ValueError(f"Unexpected metrics for '{self.ml_step}': {unexpected_keys}")
+        keys = set(metrics)
+        expected = self.METRIC_SCHEMAS[self.ml_step]
+        unexpected = keys - expected
+        missing = expected - keys
+        if unexpected:
+            raise ValueError(f"Unexpected metrics: {unexpected}")
+        if missing:
+            raise ValueError(f"Missing metrics: {missing}")
 
     def save_metrics(self, metrics: dict):
-        self.validate_metrics(metrics)
-        # Use generate JSON utility to parse and save metrics dictionary to a file for API consumption
-        saver = JSONSaver(prefix=self.prefix)
-        json_str = saver.save(metrics)
+        ts = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        data = {
+            'accuracy': f"{metrics['accuracy']:.4f}",
+            'precision': f"{metrics['precision']:.4f}",
+            'MSE': f"{metrics['MSE']:.4f}",
+            'timestamp': ts
+        }
+        self.validate_metrics(data)
+        with open(self.filename, 'w') as f:
+            json.dump(data, f)
         print(f"[{self.ml_step}] Metrics saved to {self.filename}")
+        return data
 
-    def send_to_blockchain(self, js_update_path): #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion
+    def send_to_blockchain(self):
+        if not os.path.isfile(self.js_update_path):
+            print(f"[{self.ml_step}] No script found at {self.js_update_path}, skipping blockchain update.")
+            return
         try:
             result = subprocess.run(
-                ['node', js_update_path, self.filename],
+                ['node', self.js_update_path, self.filename],
                 check=True,
                 capture_output=True,
                 text=True
             )
-            print(f"[{self.ml_step}] Blockchain update successful:\n", result.stdout)
+            print(f"[{self.ml_step}] Blockchain update successful:\n{result.stdout.strip()}")
         except subprocess.CalledProcessError as e:
-            print(f"[{self.ml_step}] Blockchain update failed:\n", e.stderr)
-
-# Example usage
-if __name__ == "__main__":
-    wrapper = BlockchainMetricsWrapper(ml_step="train")
-    wrapper.save_metrics({"accuracy": 0.94, "loss": 0.08})
-    wrapper.send_to_blockchain()
+            print(f"[{self.ml_step}] Blockchain update failed:\n{e.stderr.strip()}")
+        return

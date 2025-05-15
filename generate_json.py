@@ -4,7 +4,7 @@ from datetime import datetime
 
 # reusable class that accepts Python dictionary with metrics and values or other key, value pairs to generate and save JSON file for API call to blockchain
 class JSONSaver:
-    def __init__(self, directory=".", prefix="data"):
+    def __init__(self, directory="ML_Verse", prefix="data"):
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S") #example 2025-05-15_101113
         self.filename = os.path.join(directory, f"{prefix}.json")
 
