@@ -2,6 +2,16 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
 from datetime import datetime
+import os
+import sys
+
+def add_import_path(levels_up=1):
+    base = os.path.abspath(os.path.join(os.path.dirname(__file__), *['..'] * levels_up))
+    if base not in sys.path:
+        sys.path.append(base)
+
+add_import_path(2)
+from BlockchainWrapper import BlockchainMetricsWrapper
 
 def run_model_3():
     X = np.random.rand(150, 4)
@@ -15,3 +25,7 @@ def run_model_3():
     acc = accuracy_score(y_true, y_pred)
     prec = precision_score(y_true, y_pred)
     return {'mse': mse, 'accuracy': acc, 'precision': prec, 'timestamp': datetime.now().isoformat()}
+
+bw = BlockchainMetricsWrapper(ml_step='train')
+metrics = run_model_3()
+bw.save_metrics(metrics)
