@@ -1,1 +1,1 @@
-# Decentralized-MLOp s
+# Decentralized-MLOps
