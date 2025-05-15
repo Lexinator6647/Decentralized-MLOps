@@ -1,10 +1,17 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-import joblib
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
+from datetime import datetime
 
-X = np.random.rand(150, 4)
-y = (X.sum(axis=1) + np.random.randn(150) * 0.1 > 2).astype(int)
-clf = LogisticRegression(solver='liblinear', random_state=42)
-clf.fit(X, y)
-joblib.dump(clf, 'model_3.pkl')
-print('Model_3 trained and saved.')
+def run_model_3():
+    X = np.random.rand(150, 4)
+    y = (X.sum(axis=1) + np.random.randn(150) * 0.1 > 2).astype(int)
+    model = LogisticRegression(solver='liblinear', random_state=42)
+    model.fit(X, y)
+    X_test = np.random.rand(40, 4)
+    y_true = (X_test.sum(axis=1) + np.random.randn(40) * 0.1 > 2).astype(int)
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_true, y_pred)
+    acc = accuracy_score(y_true, y_pred)
+    prec = precision_score(y_true, y_pred)
+    return {'mse': mse, 'accuracy': acc, 'precision': prec, 'timestamp': datetime.now().isoformat()}
