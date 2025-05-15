@@ -1,7 +1,17 @@
+import os
+import sys
 import joblib
 import numpy as np
 from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
 from datetime import datetime
+
+def add_import_path(levels_up=1):
+    base = os.path.abspath(os.path.join(os.path.dirname(__file__), *['..'] * levels_up))
+    if base not in sys.path:
+        sys.path.append(base)
+
+add_import_path(2)
+from BlockchainWrapper import BlockchainMetricsWrapper
 
 def monitor_model_1():
     model = joblib.load('model_1.pkl')
@@ -27,3 +37,7 @@ def monitor_model_1():
         avg[key] /= len(pairs)
     avg['timestamp'] = datetime.now().isoformat()
     return avg
+
+bw = BlockchainMetricsWrapper(ml_step='monitor')
+metrics = monitor_model_1()
+bw.save_metrics(metrics)
