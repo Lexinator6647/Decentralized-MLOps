@@ -6,7 +6,7 @@ from datetime import datetime
 class JSONSaver:
     def __init__(self, directory=".", prefix="data"):
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S") #example 2025-05-15_101113
-        self.filename = os.path.join(directory, f"{prefix}_{timestamp}.json")
+        self.filename = os.path.join(directory, f"{prefix}.json")
 
     def save(self, data: dict) -> str:
         """Save the input dictionary to a new JSON file and return the JSON string."""

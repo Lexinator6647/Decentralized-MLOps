@@ -2,15 +2,15 @@ import json
 import os
 import subprocess
 from datetime import datetime
-import generate_json
+from generate_json import JSONSaver
 
 class BlockchainMetricsWrapper:
     VALID_ML_STEPS = ["train", "monitor", "promote"]
     
     METRIC_SCHEMAS = {
-        "train": {"accuracy", "precision", "MSE"},
-        "monitor": {"accuracy_drift", "precision_drift", "MSE_drift"},
-        "promote": {"model_version", "URI"}
+        "train": {"accuracy", "precision", "mse", "timestamp"},
+        "monitor": {"accuracy_drift", "precision_drift", "mse_drift", "timestamp"},
+        "promote": {"model_version", "model_uri", "timestamp"}
     }
 
     def __init__(self, ml_step: str, output_dir="."):
@@ -21,7 +21,8 @@ class BlockchainMetricsWrapper:
         self.expected_metrics = self.METRIC_SCHEMAS[ml_step]
         os.makedirs(output_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-        self.filename = os.path.join(output_dir, f"{ml_step}_metrics_{timestamp}.json")
+        self.prefix = f"{ml_step}_metrics"
+        self.filename = os.path.join(output_dir, f"{self.prefix}.json")
 
     def validate_metrics(self, metrics: dict):
         unexpected_keys = set(metrics.keys()) - self.expected_metrics
@@ -31,11 +32,11 @@ class BlockchainMetricsWrapper:
     def save_metrics(self, metrics: dict):
         self.validate_metrics(metrics)
         # Use generate JSON utility to parse and save metrics dictionary to a file for API consumption
-        saver = JSONSaver()
+        saver = JSONSaver(prefix=self.prefix)
         json_str = saver.save(metrics)
         print(f"[{self.ml_step}] Metrics saved to {self.filename}")
 
-    def send_to_blockchain(self, js_update_path: str #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion):
+    def send_to_blockchain(self, js_update_path): #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion
         try:
             result = subprocess.run(
                 ['node', js_update_path, self.filename],
