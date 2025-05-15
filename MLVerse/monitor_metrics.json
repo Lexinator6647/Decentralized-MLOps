@@ -1,0 +1,6 @@
+{
+    "accuracy_drift" : "0.3",
+    "precision_drift": "1",
+    "MSE_drift": "500",
+    "timestamp":"2025-07-15_101343" 
+}
