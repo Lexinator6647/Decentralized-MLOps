@@ -36,7 +36,7 @@ class BlockchainMetricsWrapper:
         json_str = saver.save(metrics)
         print(f"[{self.ml_step}] Metrics saved to {self.filename}")
 
-    def send_to_blockchain(self, js_update_path): #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion
+    def send_to_blockchain(self, js_update_path = f"MLVerse/{ml_step}_policy.js"): #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion
         try:
             result = subprocess.run(
                 ['node', js_update_path, self.filename],
