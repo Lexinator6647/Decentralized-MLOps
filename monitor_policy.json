@@ -1,0 +1,32 @@
+{
+  "Policy": "Model Depracation Policy",
+  "ForeignCalls": [
+    {
+      "name": "GetAccessLevel(x)",
+      "address": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+      "signature": "accessLevel(address)",
+      "returnType": "uint256",
+      "parameterTypes": "address",
+      "encodedIndices": "0"
+    }
+  ],
+  "Trackers": [
+    {
+      "name": "largeTransactionCount",
+      "type": "uint256",
+      "defaultValue": 0
+    }
+  ],
+  "RulesJSON": [
+    {
+      "condition": "(accuracy_drift < 0.1) AND (mse_drift < 0.1)",
+      "positiveEffects": [
+        "TRU:depracatationFlag = \"Pass\"",
+        "TRU:timestamp = \"{timestamp}\""
+      ],
+      "negativeEffects": ["TRU:depracationFlag = \"Fail\"", "TRU:timestamp = \"{timestamp}\""],
+      "functionSignature": "transfer(address recipient, uint256 amount)",
+      "encodedValues": "address recipient, uint256 amount, uint256 receiverBalance"
+    }
+  ]
+}
