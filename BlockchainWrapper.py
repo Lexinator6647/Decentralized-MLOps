@@ -23,6 +23,7 @@ class BlockchainMetricsWrapper:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
         self.prefix = f"{ml_step}_metrics"
         self.filename = os.path.join(output_dir, f"{self.prefix}.json")
+        self.js_update_path = f"MLVerse/{self.ml_step}_policy.js"
 
     def validate_metrics(self, metrics: dict):
         unexpected_keys = set(metrics.keys()) - self.expected_metrics
@@ -36,7 +37,7 @@ class BlockchainMetricsWrapper:
         json_str = saver.save(metrics)
         print(f"[{self.ml_step}] Metrics saved to {self.filename}")
 
-    def send_to_blockchain(self, js_update_path = f"MLVerse/{ml_step}_policy.js"): #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion
+    def send_to_blockchain(self): #js file that connects to Forte and submits keys and values for update, customized for train, monitor or promotion
         try:
             result = subprocess.run(
                 ['node', js_update_path, self.filename],
