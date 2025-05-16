@@ -17,7 +17,7 @@ Works in standard Python environments (cloud platforms, local dev setups, or Jup
 
 No code migration or environment changes are needed — continue running ML tasks in pure Python.
 
-![ML Universe UI](https://drive.google.com/file/d/1vFoOssWfRkdpq3DM0ECy16n0K-uAan5R/view?usp=sharing)
+[ML Universe UI](docs/ML_Universe.png)
 
 [Watch Demo Video](https://drive.google.com/file/d/your-file-id/view)
 
