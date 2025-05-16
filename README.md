@@ -28,10 +28,10 @@ No code migration or environment changes are needed — continue running ML task
 .
 ├── BlockchainWrapper.py     # Main Python SDK – import this in ML code
 ├── ML_Models/
-│   ├── model_a/
+│   ├── model_1/
 │   │   ├── train.py
 │   │   └── monitor.py
-│   ├── model_b/
+│   ├── model_2/
 │   │   ├── train.py
 │   │   └── monitor.py
 │   └── ...
