@@ -1,31 +1,47 @@
-import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
-from datetime import datetime
 import os
 import sys
 
+# allow importing the wrapper from project root
 def add_import_path(levels_up=1):
-    base = os.path.abspath(os.path.join(os.path.dirname(__file__), *['..'] * levels_up))
-    if base not in sys.path:
-        sys.path.append(base)
+    p = os.path.abspath(__file__)
+    for _ in range(levels_up):
+        p = os.path.dirname(p)
+    sys.path.insert(0, p)
 
 add_import_path(2)
+
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import mean_squared_error, accuracy_score, precision_score
+import joblib
 from BlockchainWrapper import BlockchainMetricsWrapper
 
-def run_model_3():
+def train_and_eval():
+    # TRAIN
     X = np.random.rand(150, 4)
     y = (X.sum(axis=1) + np.random.randn(150) * 0.1 > 2).astype(int)
     model = LogisticRegression(solver='liblinear', random_state=42)
     model.fit(X, y)
+    joblib.dump(model, 'model_3.pkl')
+
+    # EVALUATE
     X_test = np.random.rand(40, 4)
     y_true = (X_test.sum(axis=1) + np.random.randn(40) * 0.1 > 2).astype(int)
     y_pred = model.predict(X_test)
-    mse = mean_squared_error(y_true, y_pred)
-    acc = accuracy_score(y_true, y_pred)
-    prec = precision_score(y_true, y_pred)
-    return {'mse': mse, 'accuracy': acc, 'precision': prec, 'timestamp': datetime.now().isoformat()}
 
-bw = BlockchainMetricsWrapper(ml_step='train')
-metrics = run_model_3()
-bw.save_metrics(metrics)
+    return {
+        'accuracy': accuracy_score(y_true, y_pred),
+        'precision': precision_score(y_true, y_pred),
+        'MSE': mean_squared_error(y_true, y_pred)
+    }
+
+if __name__ == "__main__":
+    # point at your ML_Verse directory
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    mlverse_dir   = os.path.join(project_root, "ML_Verse")
+
+    metrics = train_and_eval()
+
+    # wrapper will save to ML_Verse/train_metrics.json
+    wrapper = BlockchainMetricsWrapper(ml_step="train", output_dir=mlverse_dir)
+    wrapper.main(metrics)        # runs ML_Verse/O2_train.js if present

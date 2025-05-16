@@ -1,0 +1,5 @@
+{
+  "train": ["accuracy", "precision", "MSE", "timestamp"],
+  "monitor": ["accuracy_drift", "precision_drift", "MSE_drift", "timestamp"],
+  "promote": ["model_version", "model_uri", "timestamp"]
+}
