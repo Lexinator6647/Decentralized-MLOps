@@ -26,7 +26,7 @@ No code migration or environment changes are needed — continue running ML task
 [Link to our presentation in Canva](https://www.canva.com/design/DAGnhlJu3RY/EDm30vFwvf9E6uZmZzSOBw/edit?utm_content=DAGnhlJu3RY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 **Project Structure**<br>
-<pre>
+<pre> 
 .
 ├── BlockchainWrapper.py     # Main Python SDK – import this in ML code
 ├── ML_Models/
@@ -45,10 +45,39 @@ No code migration or environment changes are needed — continue running ML task
 │   └── ...                  # Diagrams, documentation, media assets
 ├── README.md
 └── requirements.txt
-</pre>
+ </pre>
 
 **Requirements**<br>
 Python and Node JS are required to interact with this library. Node JS is needed on the backend to run the abstracted Javascript code under *ML_Verse* with Forte API calls.<br>
+
+**Usage**<br>
+
+Import the BloackchainWrapper module from our SDK into your ML tasks on Python, instantiate the class with the respective ml_step ('train', 'monitor', 'promote') and pass a metrics dictionary with key, value pairs that correspond to the Validation Schema for this ml_step. The keys in the metrics dictionary and validation schema need to match with those expected by the blockchain tables. The Validation Schema should be custom-coded in a JSON file and the relative path for the .json file can be provided as a class argument *schema_path* for the wrapper. An example JSON file 'Metrics_Schema.json' is included in the repository at the same level as the BlockchainWrapper but the class accepts an override for custom file paths in your ML environment.
+
+The JSON file should be of the following format:
+```
+{
+  "train": ["accuracy", "precision", "MSE", "timestamp"],
+  "monitor": ["accuracy_drift", "precision_drift", "mse_drift", "timestamp"],
+  "promote": ["model_version", "model_uri", "timestamp"]
+}
+```
+We recommend uploading timestamps at the minimum with each update for lineage, filtering and uniqueness when integrating with smart contracts. Model version numbers are also recommended.
+
+Below is an example of usage with our SDK
+```
+example-train.py
+
+from BlockchainWrapper import BlockchainMetricsWrapper
+
+# return a metrics dictionary of format {metric1:"value", metric2:"value", metric3:"value"}
+metrics = train_and_eval()
+
+wrapper = BlockchainMetricsWrapper(ml_step="train")
+wrapper.save_metrics(metrics)
+wrapper.send_to_blockchain()
+
+```
 
 **Key Components**<br>
 *BlockchainWrapper.py* – Python SDK (Main Entry Point)<br>
@@ -84,4 +113,3 @@ Handle actual HTTP requests to Forte’s O2 Oracle and Rules Engine.<br>
 Read from the JSON files produced by the Python wrapper.<br>
 
 🔒 Note: End users do not need to interact with this directory directly. All interactions are abstracted through BlockchainWrapper.py and it is just for the backend and stores temporary JSON serializations of metrics.
-
