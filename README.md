@@ -19,6 +19,8 @@ No code migration or environment changes are needed — continue running ML task
 
 [ML Universe UI](docs/ML_Universe.png)
 
+[Link to the Whitepaper](docs/Decentralized_MLOps_Forte.pdf)
+
 [Watch Demo Video](https://drive.google.com/file/d/your-file-id/view)
 
 [Link to our presentation in Canva](https://www.canva.com/design/DAGnhlJu3RY/EDm30vFwvf9E6uZmZzSOBw/edit?utm_content=DAGnhlJu3RY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
