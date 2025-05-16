@@ -124,7 +124,7 @@ const postPropertyListRows = async (
 
     if (!response.ok) {
       throw new Error(
-        `Failed to post property list rows. Status: ${response.body}`
+        `Failed to post property list rows. Status: ${response.status}`
       );
     }
 
@@ -158,9 +158,6 @@ const publishChanges = async (appId, propertylistId, accessToken) => {
       throw new Error(
         `Failed to publish propertyList changes. Status: ${response.status}`
       );
-    }
-    else{
-      console.log("published successfully!!",response.status);
     }
 
     const propertylistRows = await response.json();
