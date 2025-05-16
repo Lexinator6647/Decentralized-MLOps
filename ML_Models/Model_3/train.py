@@ -44,5 +44,4 @@ if __name__ == "__main__":
 
     # wrapper will save to ML_Verse/train_metrics.json
     wrapper = BlockchainMetricsWrapper(ml_step="train", output_dir=mlverse_dir)
-    wrapper.save_metrics(metrics)        # prints [train] Metrics saved to ML_Verse/train_metrics.json
-    wrapper.send_to_blockchain()         # runs ML_Verse/O2_train.js if present
+    wrapper.main(metrics)        # runs ML_Verse/O2_train.js if present

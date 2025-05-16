@@ -68,3 +68,7 @@ class BlockchainMetricsWrapper:
         except subprocess.CalledProcessError as e:
             print(f"[{self.ml_step}] Blockchain update failed:\n{e.stderr.strip()}")
         return
+
+    def main(self, metrics):
+        self.save_metrics(metrics)
+        self.send_to_blockchain()
