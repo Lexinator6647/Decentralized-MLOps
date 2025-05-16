@@ -26,7 +26,7 @@ No code migration or environment changes are needed — continue running ML task
 [Link to our presentation in Canva](https://www.canva.com/design/DAGnhlJu3RY/EDm30vFwvf9E6uZmZzSOBw/edit?utm_content=DAGnhlJu3RY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 **Project Structure**<br>
-<pre> ```
+<pre>
 .
 ├── BlockchainWrapper.py     # Main Python SDK – import this in ML code
 ├── ML_Models/
@@ -45,7 +45,7 @@ No code migration or environment changes are needed — continue running ML task
 │   └── ...                  # Diagrams, documentation, media assets
 ├── README.md
 └── requirements.txt
-``` </pre>
+</pre>
 
 **Requirements**<br>
 Python and Node JS are required to interact with this library. Node JS is needed on the backend to run the abstracted Javascript code under *ML_Verse* with Forte API calls.<br>
