@@ -73,9 +73,16 @@ from BlockchainWrapper import BlockchainMetricsWrapper
 # return a metrics dictionary of format {metric1:"value", metric2:"value", metric3:"value"}
 metrics = train_and_eval()
 
+# Instantiate the wrapper with a mandatory *ml_step* parameter for automation
 wrapper = BlockchainMetricsWrapper(ml_step="train")
+
+# You can run these steps independently, but we have a main() method in the wrapper class that combines these and accepts and passes the 'metrics' argument to save_metrics(). Use the main() method for full automation of serializing the metrics to JSON -> sending to blockchain via JS API. This is less error-prone. In some cases you may wish to re-use an existing JSON file under *ML_Verse* that was previously created, so send_to_blockchain() can be called independently outside of the main() method to avoid overriding the JSON file.
+
 wrapper.save_metrics(metrics)
 wrapper.send_to_blockchain()
+
+# Example with main usage to automate serialization and API call. This overrides existing JSON file that the API uses with the current set of metrics from the 'metrics' dictionary.
+wrapper.main(metrics)
 
 ```
 
