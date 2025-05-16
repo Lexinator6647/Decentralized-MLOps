@@ -84,3 +84,4 @@ Handle actual HTTP requests to Forte’s O2 Oracle and Rules Engine.<br>
 Read from the JSON files produced by the Python wrapper.<br>
 
 🔒 Note: End users do not need to interact with this directory directly. All interactions are abstracted through BlockchainWrapper.py and it is just for the backend and stores temporary JSON serializations of metrics.
+
