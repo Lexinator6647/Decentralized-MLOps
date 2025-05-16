@@ -1,0 +1,38 @@
+{
+  "Policy": "Model Promotion Policy",
+  "ForeignCalls": [
+    {
+      "name": "getAllRowIds(1)",
+      "address": "0x7e319862adFC1835F0854C52D04282711F6C6B2a",
+      "signature": "allRowIds(address)", 
+      "returnType": "string",
+      "parameterTypes": "string,uint256",
+      "encodedIndices": "0"
+    }
+  ],
+  "Trackers": [
+    {
+      "name": "promotionFlag",
+      "type": "string",
+      "defaultValue": "Fail"
+    },
+    {
+        "name": "timestamp",
+        "type": "string",
+        "defaultValue": "null"
+
+    }
+  ],
+  "RulesJSON": [
+    {
+      "condition": "(accuracy > 0.8) AND (mse <1000)",
+      "positiveEffects": [
+        "TRU:promotionFlag = \"Pass\"",
+        "TRU:timestamp = \"{timestamp}\""
+      ],
+      "negativeEffects": ["emit Model retrain alert","TRU:promotionFlag = \"Fail\"", "TRU:timestamp = \"{timestamp}\""],
+      "functionSignature": "transfer(address recipient, uint256 amount)",
+      "encodedValues": "address recipient, uint256 amount, uint256 receiverBalance"
+    }
+  ]
+}
