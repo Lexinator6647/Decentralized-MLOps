@@ -24,7 +24,26 @@ No code migration or environment changes are needed — continue running ML task
 [Link to our presentation in Canva](https://www.canva.com/design/DAGnhlJu3RY/EDm30vFwvf9E6uZmZzSOBw/edit?utm_content=DAGnhlJu3RY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 **Project Structure**
-<pre> ```text . ├── BlockchainWrapper.py # Main Python SDK – import this in ML code ├── ML_Models/ │ ├── model_1/ │ │ ├── train.py │ │ └── monitor.py │ ├── model_2/ │ │ ├── train.py │ │ └── monitor.py │ └── ... ├── ML_Verse/ │ └── ... # Low-level JavaScript modules for Forte API calls ├── scripts/ │ └── ... # (Optional) utility or execution scripts ├── docs/ │ └── ... # Diagrams, documentation, media assets ├── README.md └── requirements.txt ``` </pre>
+<pre> ```text
+.
+├── BlockchainWrapper.py     # Main Python SDK – import this in ML code
+├── ML_Models/
+│   ├── model_a/
+│   │   ├── train.py
+│   │   └── monitor.py
+│   ├── model_b/
+│   │   ├── train.py
+│   │   └── monitor.py
+│   └── ...
+├── ML_Verse/
+│   └── ...                  # Low-level JavaScript modules for Forte API calls
+├── scripts/
+│   └── ...                  # (Optional) utility or execution scripts
+├── docs/
+│   └── ...                  # Diagrams, documentation, media assets
+├── README.md
+└── requirements.txt
+``` </pre>
 
 **Requirements**
 Python and Node JS are required to interact with this library. Node JS is needed on the backend to run the abstracted Javascript code under *ML_Verse* with Forte API calls.
